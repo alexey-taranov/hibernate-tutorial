@@ -6,7 +6,12 @@
 
     <groupId>ru.taranov.hibernate</groupId>
     <artifactId>hibernate-tutorial</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>hb-01-one-to-one-uni</module>
+        <module>hb-02-one-to-one-bi</module>
+    </modules>
 
     <dependencies>
 
