@@ -12,6 +12,7 @@
         <module>hb-01-one-to-one-uni</module>
         <module>hb-02-one-to-one-bi</module>
         <module>hb-03-one-to-many</module>
+        <module>hb-eager-vs-lazy-demo</module>
     </modules>
 
     <dependencies>
