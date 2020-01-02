@@ -1,14 +1,12 @@
-package ru.taranov.hibernate.hbeagervslazy;
+package ru.taranov.hibernate.hbonetomany;
 
+import ru.taranov.hibernate.hbonetomany.entity.Instructor;
+import ru.taranov.hibernate.hbonetomany.entity.InstructorDetail;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-import ru.taranov.hibernate.hbeagervslazy.entity.Course;
-import ru.taranov.hibernate.hbeagervslazy.entity.Instructor;
-import ru.taranov.hibernate.hbeagervslazy.entity.InstructorDetail;
 
-public class FetchJoinDemo {
+public class GetInstructorDetailDemo {
 
     public static void main(String[] args) {
         //create session factory
@@ -16,7 +14,6 @@ public class FetchJoinDemo {
                 .configure()
                 .addAnnotatedClass(Instructor.class)
                 .addAnnotatedClass(InstructorDetail.class)
-                .addAnnotatedClass(Course.class)
                 .buildSessionFactory();
 
         //create session
@@ -25,19 +22,11 @@ public class FetchJoinDemo {
         try {
             session.beginTransaction();
 
-            int theId = 3;
+            int theId = 2;
 
-            Query<Instructor> query =
-                    session.createQuery("select i from Instructor i "
-                            + "join fetch i.courses "
-                            + "where i.id=:theInstructorId",
-                            Instructor.class);
+            InstructorDetail instructorDetail = session.get(InstructorDetail.class, theId);
 
-            query.setParameter("theInstructorId", theId);
-
-            Instructor instructor = query.getSingleResult();
-
-            System.out.println("Instructor: " + instructor);
+            System.out.println("the associated instructor: " + instructorDetail.getInstructor());
 
             // commit transaction
             session.getTransaction().commit();

@@ -1,14 +1,13 @@
-package ru.taranov.hibernate.hbeagervslazy;
+package ru.taranov.hibernate.hbonetomany;
 
+import ru.taranov.hibernate.hbonetomany.entity.Course;
+import ru.taranov.hibernate.hbonetomany.entity.Instructor;
+import ru.taranov.hibernate.hbonetomany.entity.InstructorDetail;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-import ru.taranov.hibernate.hbeagervslazy.entity.Course;
-import ru.taranov.hibernate.hbeagervslazy.entity.Instructor;
-import ru.taranov.hibernate.hbeagervslazy.entity.InstructorDetail;
 
-public class FetchJoinDemo {
+public class CreateCoursesDemo {
 
     public static void main(String[] args) {
         //create session factory
@@ -23,26 +22,26 @@ public class FetchJoinDemo {
         Session session = sessionFactory.getCurrentSession();
 
         try {
+            // start a transaction
             session.beginTransaction();
 
             int theId = 3;
+            Instructor tempInstructor = session.get(Instructor.class, theId);
 
-            Query<Instructor> query =
-                    session.createQuery("select i from Instructor i "
-                            + "join fetch i.courses "
-                            + "where i.id=:theInstructorId",
-                            Instructor.class);
+            // create some courses
+            Course tempCourse1 = new Course("Air Guitar - The Ultimate Guide");
+            Course tempCourse2 = new Course("The Pinball Masterclass");
 
-            query.setParameter("theInstructorId", theId);
+            // add courses to instructor
+            tempInstructor.add(tempCourse1);
+            tempInstructor.add(tempCourse2);
 
-            Instructor instructor = query.getSingleResult();
-
-            System.out.println("Instructor: " + instructor);
+            // save the courses
+            session.save(tempCourse1);
+            session.save(tempCourse2);
 
             // commit transaction
             session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             session.close();
             sessionFactory.close();
